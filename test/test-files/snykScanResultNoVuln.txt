@@ -1,0 +1,11 @@
+Organisation: ppaszki-337
+Package manager: npm
+Target file: package.json
+Open source: no
+
+✓ Tested 344 dependencies for known vulnerabilities, no vulnerable paths found.
+
+Next steps:
+- Run `snyk monitor` to be notified about new related vulnerabilities.
+- Run `snyk test` as part of your CI/test.
+

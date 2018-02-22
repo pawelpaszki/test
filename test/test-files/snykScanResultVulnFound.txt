@@ -1,0 +1,151 @@
+✗ Medium severity vulnerability found on angular@1.5.10
+- desc: JSONP Callback Attack
+- info: https://snyk.io/vuln/npm:angular:20150315
+- from: lifecycle-management-for-docker@0.12.0 > angular-simple-sidebar@1.3.1 > angular@1.5.10
+No direct dependency upgrade can address this issue.
+Run `snyk wizard` to explore remediation options.
+
+✗ Medium severity vulnerability found on angular@1.6.4
+- desc: Cross-site Scripting (XSS)
+- info: https://snyk.io/vuln/npm:angular:20171018
+- from: lifecycle-management-for-docker@0.12.0 > angular@1.6.4
+Upgrade direct dependency angular@1.6.4 to angular@1.6.7
+
+✗ Medium severity vulnerability found on angular@1.6.4
+- desc: Cross-site Scripting (XSS)
+- info: https://snyk.io/vuln/npm:angular:20171018
+- from: lifecycle-management-for-docker@0.12.0 > angular-chart.js@1.1.1 > angular@1.6.4
+Your dependencies are out of date, otherwise you would be using a newer angular than angular@1.6.4.
+Try deleting node_modules, reinstalling and running `snyk test` again.
+If the problem persists, one of your dependencies may be bundling outdated modules.
+
+✗ Medium severity vulnerability found on angular@1.5.10
+- desc: Cross-site Scripting (XSS)
+- info: https://snyk.io/vuln/npm:angular:20171018
+- from: lifecycle-management-for-docker@0.12.0 > angular-simple-sidebar@1.3.1 > angular@1.5.10
+No direct dependency upgrade can address this issue.
+Run `snyk wizard` to explore remediation options.
+
+✗ Low severity vulnerability found on debug@2.6.8
+- desc: Regular Expression Denial of Service (ReDoS)
+- info: https://snyk.io/vuln/npm:debug:20170905
+- from: lifecycle-management-for-docker@0.12.0 > morgan@1.8.2 > debug@2.6.8
+Upgrade direct dependency morgan@1.8.2 to morgan@1.9.0 (triggers upgrades to debug@2.6.9)
+
+✗ Low severity vulnerability found on debug@2.6.7
+- desc: Regular Expression Denial of Service (ReDoS)
+- info: https://snyk.io/vuln/npm:debug:20170905
+- from: lifecycle-management-for-docker@0.12.0 > body-parser@1.17.2 > debug@2.6.7
+Upgrade direct dependency body-parser@1.17.2 to body-parser@1.18.2 (triggers upgrades to debug@2.6.9)
+
+✗ Low severity vulnerability found on debug@2.6.7
+- desc: Regular Expression Denial of Service (ReDoS)
+- info: https://snyk.io/vuln/npm:debug:20170905
+- from: lifecycle-management-for-docker@0.12.0 > express@4.15.3 > debug@2.6.7
+Upgrade direct dependency express@4.15.3 to express@4.15.5 (triggers upgrades to debug@2.6.9)
+
+✗ Low severity vulnerability found on debug@2.6.7
+- desc: Regular Expression Denial of Service (ReDoS)
+- info: https://snyk.io/vuln/npm:debug:20170905
+- from: lifecycle-management-for-docker@0.12.0 > express@4.15.3 > finalhandler@1.0.3 > debug@2.6.7
+Your dependencies are out of date, otherwise you would be using a newer debug than debug@2.6.7.
+Try deleting node_modules, reinstalling and running `snyk test` again.
+If the problem persists, one of your dependencies may be bundling outdated modules.
+
+✗ Low severity vulnerability found on debug@2.6.7
+- desc: Regular Expression Denial of Service (ReDoS)
+- info: https://snyk.io/vuln/npm:debug:20170905
+- from: lifecycle-management-for-docker@0.12.0 > express@4.15.3 > send@0.15.3 > debug@2.6.7
+Upgrade direct dependency express@4.15.3 to express@4.15.5 (triggers upgrades to send@0.15.6 > debug@2.6.9)
+
+✗ Low severity vulnerability found on debug@2.6.7
+- desc: Regular Expression Denial of Service (ReDoS)
+- info: https://snyk.io/vuln/npm:debug:20170905
+- from: lifecycle-management-for-docker@0.12.0 > express@4.15.3 > serve-static@1.12.3 > send@0.15.3 > debug@2.6.7
+Upgrade direct dependency express@4.15.3 to express@4.15.5 (triggers upgrades to serve-static@1.12.6 > send@0.15.6 > debug@2.6.9)
+
+✗ Low severity vulnerability found on debug@2.6.7
+- desc: Regular Expression Denial of Service (ReDoS)
+- info: https://snyk.io/vuln/npm:debug:20170905
+- from: lifecycle-management-for-docker@0.12.0 > dockerode@2.5.0 > docker-modem@1.0.0 > debug@2.6.7
+Your dependencies are out of date, otherwise you would be using a newer debug than debug@2.6.7.
+Try deleting node_modules, reinstalling and running `snyk test` again.
+If the problem persists, one of your dependencies may be bundling outdated modules.
+
+✗ High severity vulnerability found on forwarded@0.1.0
+- desc: Regular Expression Denial of Service (ReDoS)
+- info: https://snyk.io/vuln/npm:forwarded:20170908
+- from: lifecycle-management-for-docker@0.12.0 > express@4.15.3 > proxy-addr@1.1.4 > forwarded@0.1.0
+Your dependencies are out of date, otherwise you would be using a newer forwarded than forwarded@0.1.0.
+Try deleting node_modules, reinstalling and running `snyk test` again.
+If the problem persists, one of your dependencies may be bundling outdated modules.
+
+✗ High severity vulnerability found on fresh@0.5.0
+- desc: Regular Expression Denial of Service (ReDoS)
+- info: https://snyk.io/vuln/npm:fresh:20170908
+- from: lifecycle-management-for-docker@0.12.0 > express@4.15.3 > fresh@0.5.0
+Upgrade direct dependency express@4.15.3 to express@4.15.5 (triggers upgrades to fresh@0.5.2)
+
+✗ High severity vulnerability found on fresh@0.5.0
+- desc: Regular Expression Denial of Service (ReDoS)
+- info: https://snyk.io/vuln/npm:fresh:20170908
+- from: lifecycle-management-for-docker@0.12.0 > express@4.15.3 > send@0.15.3 > fresh@0.5.0
+Upgrade direct dependency express@4.15.3 to express@4.15.5 (triggers upgrades to send@0.15.6 > fresh@0.5.2)
+
+✗ High severity vulnerability found on fresh@0.5.0
+- desc: Regular Expression Denial of Service (ReDoS)
+- info: https://snyk.io/vuln/npm:fresh:20170908
+- from: lifecycle-management-for-docker@0.12.0 > express@4.15.3 > serve-static@1.12.3 > send@0.15.3 > fresh@0.5.0
+Upgrade direct dependency express@4.15.3 to express@4.15.5 (triggers upgrades to serve-static@1.12.6 > send@0.15.6 > fresh@0.5.2)
+
+✗ Low severity vulnerability found on mime@1.3.4
+- desc: Regular Expression Denial of Service (ReDoS)
+- info: https://snyk.io/vuln/npm:mime:20170907
+- from: lifecycle-management-for-docker@0.12.0 > express@4.15.3 > send@0.15.3 > mime@1.3.4
+Upgrade direct dependency express@4.15.3 to express@4.16.0 (triggers upgrades to send@0.16.0 > mime@1.4.1)
+
+✗ Low severity vulnerability found on mime@1.3.4
+- desc: Regular Expression Denial of Service (ReDoS)
+- info: https://snyk.io/vuln/npm:mime:20170907
+- from: lifecycle-management-for-docker@0.12.0 > express@4.15.3 > serve-static@1.12.3 > send@0.15.3 > mime@1.3.4
+Upgrade direct dependency express@4.15.3 to express@4.16.0 (triggers upgrades to serve-static@1.13.0 > send@0.16.0 > mime@1.4.1)
+
+✗ Low severity vulnerability found on moment@2.18.1
+- desc: Regular Expression Denial of Service (ReDoS)
+- info: https://snyk.io/vuln/npm:moment:20170905
+- from: lifecycle-management-for-docker@0.12.0 > moment@2.18.1
+Upgrade direct dependency moment@2.18.1 to moment@2.19.3
+
+✗ Low severity vulnerability found on moment@2.18.1
+- desc: Regular Expression Denial of Service (ReDoS)
+- info: https://snyk.io/vuln/npm:moment:20170905
+- from: lifecycle-management-for-docker@0.12.0 > jsonwebtoken@7.4.1 > joi@6.10.1 > moment@2.18.1
+Your dependencies are out of date, otherwise you would be using a newer moment than moment@2.18.1.
+Try deleting node_modules, reinstalling and running `snyk test` again.
+If the problem persists, one of your dependencies may be bundling outdated modules.
+
+✗ Low severity vulnerability found on moment@2.18.1
+- desc: Regular Expression Denial of Service (ReDoS)
+- info: https://snyk.io/vuln/npm:moment:20170905
+- from: lifecycle-management-for-docker@0.12.0 > chart.js@2.6.0 > moment@2.18.1
+Your dependencies are out of date, otherwise you would be using a newer moment than moment@2.18.1.
+Try deleting node_modules, reinstalling and running `snyk test` again.
+If the problem persists, one of your dependencies may be bundling outdated modules.
+
+✗ Low severity vulnerability found on moment@2.18.1
+- desc: Regular Expression Denial of Service (ReDoS)
+- info: https://snyk.io/vuln/npm:moment:20170905
+- from: lifecycle-management-for-docker@0.12.0 > angular-chart.js@1.1.1 > chart.js@2.3.0 > moment@2.18.1
+Your dependencies are out of date, otherwise you would be using a newer moment than moment@2.18.1.
+Try deleting node_modules, reinstalling and running `snyk test` again.
+If the problem persists, one of your dependencies may be bundling outdated modules.
+
+Organisation: ppaszki-337
+Package manager: npm
+Target file: package.json
+Open source: no
+
+Tested 142 dependencies for known vulnerabilities, found 7 vulnerabilities, 21 vulnerable paths.
+
+Run `snyk wizard` to address these issues.
+

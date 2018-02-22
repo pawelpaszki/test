@@ -1,0 +1,28 @@
+dist: trusty
+sudo: false
+services:
+- docker
+- mongodb
+addons:
+  sonarcloud:
+    organization: "pawelpaszki-github"
+    token:
+        secure: "r3UQcUq+J/g6SDBiSopRK4yZnDQIv8c1bLHCP6u+BjN64Hw9liFxYrxFjHbeZfAAeHId8J86+sYPztej5TzrQlUII3FED8ICY90N6iKyQjo8GaDoco5xjHxQrVWj5mXxja4iqa3eMK0rBGnB/tySPRpJiLirJfRz4r5ZIJV8jd+XrmJzTdYyzXxMyY0aCRzXw45HRa6qqiLbaNvFAWL58uYwdmv7SPPEC+onkRKZ32v4opo2Z7F+BTvM2RgvelgFVUQiEsl+QClme2Z1hiuUZm6tuW71q8YmLJTQItDQ69OYW9RZKXDzXYl9SKe28OePM81iBLWnFL6t0DBO66wQLQeFOZE3VKA4EX+UG40AxdENPKio5s8NOvbK8n6iZ7EaUlife5j/hnZeqEOpwU+D0XjuO4zdEhpTg4KZ4OebJRqeJSeKvF3+3S5Gm8pN6gid4FZpkI4W5laYMtOd40vU7SyjzGSrYmHXNzdMzbQiV0V/88VPidCm2aKymnQkPltjQiI2i9FWkL0lAmwKtkDZxFD17FL36305Ie8fBNEuYj7YxtC/rpXTiyvlUkX3KNGcBYpwZGjbQQcVECt/MyLwi9zienG8lvsJt1DLIoZuE5usg7+UV7eoQr4Z8Wf+eS46u09+g+E3ilTdVfd7aUVOBw+Yi/QESlYl/2qWhaNIJlA="
+before_script:
+- sleep 15
+- mongo mydb_test --eval 'db.createUser({user:"travis",pwd:"test",roles:["readWrite"]});'
+script:
+- docker login -u "$DOCKER_USERNAME" -p "$DOCKER_PASSWORD"
+- docker pull mhart/alpine-node
+- docker pull pawelpaszki/vuln-demo-2-node:latest
+- docker pull pawelpaszki/vuln-demo-9-node:latest
+- docker pull pawelpaszki/vuln-demo-10-node:latest
+- npm test
+language: node_js
+node_js: 6.12.3
+install:
+- npm install
+notifications:
+  email:
+    on_success: never
+    on_failure: always

@@ -1,0 +1,15 @@
+Using /home/pawel/Documents/wit/year4/semester1/modules/Fyp/FYP_code/FYP-back-end/package.json
+
+ @types/mongoose  ^4.7.32  →  ^5.0.0 
+ @types/node        9.3.0  →   9.4.0 
+
+The following dependencies are satisfied by their declared version range, but the installed versions are behind. You can install the latest versions without modifying your package file by using npm update. If you want to update the dependencies in your package file anyway, run ncu -a.
+
+ mongoose             ^5.0.0  →   ^5.0.1 
+ @types/mocha        ^2.2.46  →  ^2.2.47 
+ @types/mongodb       ^3.0.3  →   ^3.0.5 
+ eslint              ^4.15.0  →  ^4.16.0 
+ source-map-support   ^0.5.2  →   ^0.5.3 
+
+Run ncu with -u to upgrade package.json
+

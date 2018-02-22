@@ -1,0 +1,4 @@
+Using /home/pawel/Dev/test-app/package.json
+
+All dependencies match the latest package versions :)
+

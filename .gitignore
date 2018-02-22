@@ -1,0 +1,9 @@
+imagesTestDir/*
+node_modules
+dist
+npm-debug.log
+coverage
+.nyc_output
+.scannerwork
+npm-debug.log
+.idea

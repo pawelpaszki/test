@@ -1,0 +1,29 @@
+
+> sample@1.0.0 test /home/pawel/Dev/sample_ts_coverage
+> nyc mocha --exit
+
+
+
+  # Tasks
+    ✓ should add some tasks (194ms)
+    ✓ should not add a task when no data is sent
+    ✓ should update a task
+    ✓ should not update a task when no data is sent
+    ✓ should return bad request for trying to update a task with a malformed id
+    ✓ should retrieve a task
+    ✓ should retrieve all tasks (41ms)
+    ✓ should return bad request for trying to retrieve a task with a malformed id
+    ✓ should return not found for a non existent task
+    ✓ should return bad request for trying to delete a task with a malformed id
+    ✓ should delete a task
+
+
+  11 passing (421ms)
+
+
+=============================== Coverage summary ===============================
+Statements   : 91.11% ( 41/45 )
+Branches     : 66.67% ( 4/6 )
+Functions    : 92.31% ( 12/13 )
+Lines        : 89.74% ( 35/39 )
+================================================================================

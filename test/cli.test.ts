@@ -7,8 +7,8 @@ describe('# CLI Test', () => {
     it('should create a container', function(done) {
       this.timeout(20000);
       const output = ChildProcessHandler.executeChildProcCommand(
-          'ts-node src/vuln-cli.ts register username password');
-      expect(output).to.not.equal('');
+          'ts-node src/vuln-cli.ts createContainer token someimage');
+      expect(output).to.equal('Unable to authenticate token.');
       done();
     });
   });

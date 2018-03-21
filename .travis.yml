@@ -12,7 +12,6 @@ script:
 - docker pull pawelpaszki/vuln-demo-2-node:latest
 - docker pull pawelpaszki/vuln-demo-9-node:latest
 - docker pull pawelpaszki/vuln-demo-10-node:latest
-- npm run dev
 - npm test
 language: node_js
 node_js: 6.12.3

@@ -5,7 +5,6 @@ import * as fs from 'fs';
 import {ChildProcessHandler} from '../utilities/ChildProcessHandler';
 import ImageNameToDirNameConverter from '../utilities/ImageNameToDirNameConverter';
 
-
 const docker = new Docker({
   socketPath: '/var/run/docker.sock',
 });
@@ -13,7 +12,7 @@ const docker = new Docker({
 class ContainerController {
 
   public create = async (req: Request, res: Response) => {
-    const name: string = req.body.name;
+    const name: string = req.body.imageName;
     docker.createContainer({
       AttachStderr: true,
       AttachStdin: false,
@@ -29,7 +28,7 @@ class ContainerController {
         });
       } else {
         const id = data.id;
-        res.status(200).json({
+        res.status(201).json({
           id,
         });
       }
@@ -106,12 +105,12 @@ class ContainerController {
       containerInfo = await container.inspect();
     } catch (error) {
       return res.status(404).json({
-        err: 'Unable to extract source code. Container not found',
+        error: 'Unable to extract source code. Container not found',
       });
     }
     if (containerInfo.State.Running === false) {
       return res.status(403).json({
-        err: 'The container must be running to extract the source code',
+        error: 'The container must be running to extract the source code',
       });
     }
     const testDir: string = ImageNameToDirNameConverter.convertImageNameToDirName(req.body.imageName);
@@ -159,7 +158,7 @@ class ContainerController {
       }
       getDirOutput();
     } else {
-      res.status(500).json({
+      res.status(422).json({
         error: 'No image name provided',
       });
     }

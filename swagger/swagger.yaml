@@ -1,0 +1,1147 @@
+swagger: '2.1'
+info:
+  title: Docker Vulnerability Manager API
+  description: Docker containers' source code freshness management API
+  version: 0.19.0
+consumes:
+  - application/json
+produces:
+  - application/json
+basePath: /api
+components:
+  parameters:
+    token:
+      in: header
+      name: token
+      required: true
+      schema:
+        type: string
+      description: authentication token
+      example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjVhOTVhNzBiYjljMjQ1MzA2YjE2YzE0NSIsImlhdCI6MTUxOTkyMzc5NiwiZXhwIjoxNTE5OTI3Mzk2fQ.e5cKEEGtDb54AVlnZHf-P132x1LTrS4WrgXywfmkSkk
+    imageNamePath:
+      in: path
+      name: imageName
+      required: true
+      schema:
+        type: string
+      description: name of the Docker image
+    containerIdPath:
+      in: path
+      name: containerId
+      required: true
+      schema:
+        type: string
+      description: ID of a Docker container
+    imageIdPath:
+      in: path
+      name: imageId
+      required: true
+      schema:
+        type: string
+      description: ID of a Docker image
+    imageFreshnessIdPath:
+      in: path
+      name: imageFreshnessId
+      required: true
+      schema:
+        type: string
+      description: ID of a Image Freshness Entry
+    containerId:
+      in: body
+      name: containerId
+      required: true
+      schema:
+        type: string
+      description: ID of a Docker container
+    imageName:
+      in: body
+      name: imageName
+      required: true
+      schema:
+        type: string
+      description: name of the Docker image
+      example: pawelpaszki/vuln-demo-2-node
+    startDate:
+      in: body
+      name: startDate
+      required: false
+      schema:
+        type: string
+      descrpiton: start date of image freshness records
+    endDate:
+      in: body
+      name: endDate
+      required: false
+      schema:
+        type: string
+      descrpiton: end date of image freshness records
+    dockerUsername:
+      in: body
+      name: username
+      required: true
+      schema:
+        type: string
+      descrpiton: Docker registry username
+    dockerPassword:
+      in: body
+      name: password
+      required: true
+      schema:
+        type: string
+      descrpiton: Docker registry password
+    username:
+      in: body
+      name: username
+      required: true
+      schema:
+        type: string
+      descrpiton: username to login/ register in the app
+    password:
+      in: body
+      name: password
+      required: true
+      schema:
+        type: string
+      descrpiton: password to login/ register in the app
+    packageName:
+      in: body
+      name: packageName
+      required: false
+      schema:
+        type: string
+      descrpiton: name of the package to be updated
+    checkOnly:
+      in: body
+      name: checkOnly
+      required: false
+      schema:
+        type: boolean
+      descrpiton: provided if persistence of the vulnerability check is not required
+
+paths:
+  /containers:
+    get:
+      summary: List all containers.
+      description:  Lists all of the Docker containers on the host
+      operationId: listContainers
+      parameters:
+        - $ref: '#/components/parameters/token'
+      tags:
+        - Containers
+      responses:
+        '200':
+          description: OK
+          schema:
+            type: object
+            properties:
+              Id:
+                type: string
+                example: fe9593f590c180f972d1a9f2a29c49b76c0c61c83919fe362b53abb976f5a94a
+              Names:
+                type: array
+                example: ["/nifty_kowalevski"]
+              Image:
+                type: string
+                example: pawelpaszki/vuln-demo-2-node
+              ImageID:
+                type: string
+                example: sha256:d8217af59a1d6dfd795d50b67e9df4a4785bdd4d4b56a98942a5c06a1a67a0fa
+              Command:
+                type: string
+                example: npm start
+              Created:
+                type: date
+                example: 1519669038
+              Ports:
+                type: array
+                example: []
+              Labels:
+                type: object
+                example: {}
+              State:
+                type: string
+                example: Created
+              Status:
+                type: string
+                example: Created
+              HostConfig:
+                type: object
+                example: { "NetworkMode": "default" }
+              NetworkSettings:
+                type: array
+                example: []
+              Mounts:
+                type: array
+                example: []
+  /containers/create:
+    post:
+      summary: Create a container
+      description: create new Docker container
+      operationId: createContainer
+      tags:
+        - Containers
+      parameters:
+        - $ref: '#/components/parameters/token'
+        - $ref: '#/components/parameters/imageName'
+      responses:
+        '201':
+          description: OK
+          schema:
+            type: object
+            properties:
+              id:
+                type: string
+                example: fe9593f590c180f972d1a9f2a29c49b76c0c61c83919fe362b53abb976f5a94a
+        '500':
+          description: Unable to create container
+  /containers/start:
+    post:
+      summary: Start a container
+      description: start an existing Docker container
+      operationId: startContainer
+      tags:
+        - Containers
+      parameters:
+        - $ref: '#/components/parameters/token'
+        - $ref: '#/components/parameters/containerId'
+      responses:
+        '200':
+          description: OK
+          schema:
+            type: object
+            properties:
+              message:
+                type: string
+                example: Container started successfully
+        '404':
+          description: Unable to start container
+          schema:
+            type: object
+            properties:
+              error:
+                type: string
+                example: Unable to start container
+  /containers/stop:
+    post:
+      summary: Stop a container
+      description: stop a running Docker container
+      operationId: stopContainer
+      tags:
+        - Containers
+      parameters:
+        - $ref: '#/components/parameters/token'
+        - $ref: '#/components/parameters/containerId'
+      responses:
+        '200':
+          description: OK
+          schema:
+            type: object
+            properties:
+              message:
+                type: string
+                example: Container stopped successfully
+        '404':
+          description: Unable to stop container
+          schema:
+            type: object
+            properties:
+              error:
+                type: string
+                example: Unable to stop container
+  /containers/extract:
+    post:
+      summary: Extract source code
+      description: Extract source code of a running container
+      operationId: extractContainer
+      tags:
+        - Containers
+      parameters:
+        - $ref: '#/components/parameters/token'
+        - $ref: '#/components/parameters/containerId'
+        - $ref: '#/components/parameters/imageName'
+      responses:
+        '200':
+          description: OK
+          schema:
+            type: object
+            properties:
+              message:
+                type: string
+                example: Container source code extracted successfully
+        '403':
+          description: Source code already extracted
+          schema:
+            type: object
+            properties:
+              error:
+                type: string
+                example: Source code already extracted
+        '404':
+          description: Unable to extract source code. Container not found
+          schema:
+            type: object
+            properties:
+              error:
+                type: string
+                example: Unable to extract source code. Container not found
+        '422':
+          description: No image name provided
+          schema:
+            type: object
+            properties:
+              error:
+                type: string
+                example: No image name provided
+        '500':
+          description: Unable to extract source code
+          schema:
+            type: object
+            properties:
+              error:
+                type: string
+                example: Unable to extract source code
+  /containers/{id}:
+    delete:
+      summary: Delete container
+      description: delete stopped Docker container
+      operationId: deleteContainer
+      tags:
+        - Containers
+      parameters:
+        - $ref: '#/components/parameters/token'
+        - $ref: '#/components/parameters/containerIdPath'
+      responses:
+        '200':
+          description: OK
+          schema:
+            type: object
+            properties:
+              message:
+                type: string
+                example: Container removed successfully
+        '404':
+          description: Unable to remove container
+          schema:
+            type: object
+            properties:
+              error:
+                type: string
+                example: Unable to remove container
+        '409':
+          description: Unable to remove running container
+          schema:
+            type: object
+            properties:
+              error:
+                type: string
+                example: Unable to remove running container
+  /images:
+    get:
+      summary: List all images
+      description:  Lists all of the Docker images on the host
+      operationId: listImages
+      tags:
+        - Images
+      responses:
+        '200':
+          description: OK
+          schema:
+            type: object
+            properties:
+              freshnessGrade:
+                type: string
+                example: A
+              id:
+                type: string
+                example: 30bd8d5b7929d164401eac5fbbe7e3cb0e190c6b397c1cf6fc7b96159d1f4376
+              name:
+                type: string
+                example: pawelpaszki/vuln-demo-2-node
+              size:
+                type: string
+                example: 98.362513 MB
+              tag:
+                type: string
+                example: latest
+  /images/search:
+    post:
+      summary: Search for Docker images
+      description: Search for Docker images available in Docker registry
+      operationId: searchImages
+      tags:
+        - Images
+      parameters:
+        - $ref: '#/components/parameters/token'
+        - $ref: '#/components/parameters/imageName'
+      responses:
+        '200':
+          description: OK
+          schema:
+            type: array
+            example: [
+                       "ubuntu",
+                       "dorowu/ubuntu-desktop-lxde-vnc",
+                       "rastasheep/ubuntu-sshd",
+                       "ansible/ubuntu14.04-ansible",
+                       "ubuntu-upstart",
+                       "neurodebian",
+                       "ubuntu-debootstrap",
+                       "1and1internet/ubuntu-16-nginx-php-phpmyadmin-mysql-5",
+                       "nuagebec/ubuntu",
+                       "tutum/ubuntu",
+                       "ppc64le/ubuntu",
+                       "i386/ubuntu",
+                       "1and1internet/ubuntu-16-apache-php-7.0",
+                       "eclipse/ubuntu_jdk8",
+                       "1and1internet/ubuntu-16-apache",
+                       "codenvy/ubuntu_jdk8",
+                       "darksheer/ubuntu",
+                       "1and1internet/ubuntu-16-nginx-php-5.6-wordpress-4",
+                       "1and1internet/ubuntu-16-nginx-php-phpmyadmin-mariadb-10",
+                       "pivotaldata/ubuntu",
+                       "1and1internet/ubuntu-16-healthcheck",
+                       "1and1internet/ubuntu-16-sshd",
+                       "ossobv/ubuntu",
+                       "pivotaldata/ubuntu-gpdb-dev",
+                       "smartentry/ubuntu"
+                   ]
+  /images/pull:
+    post:
+      summary: pull a Docker image
+      description: pull Docker image specified by name
+      operationId: pullImage
+      tags:
+        - Images
+      parameters:
+        - $ref: '#/components/parameters/token'
+        - $ref: '#/components/parameters/imageName'
+      responses:
+        '200':
+          description: OK
+          schema:
+            type: object
+            properties:
+              message:
+                type: string
+                example: Image pulled successfully
+        '404':
+          description: Unable to pull image
+          schema:
+            type: object
+            properties:
+              error:
+                type: string
+                example: Unable to pull image
+  /images/checktag:
+    post:
+      summary: get tag
+      description: get latest Image's tag
+      operationId: checkTag
+      tags:
+        - Images
+      parameters:
+        - $ref: '#/components/parameters/token'
+        - $ref: '#/components/parameters/imageName'
+      responses:
+        '200':
+          description: OK
+          schema:
+            type: object
+            properties:
+              major:
+                type: string
+                example: 0
+              minor:
+                type: string
+                example: 0
+              patch:
+                type: string
+                example: 1
+  /images/build:
+    post:
+      summary: build a Docker image
+      description: build Docker image specified by name
+      operationId: buildImage
+      tags:
+        - Images
+      parameters:
+        - $ref: '#/components/parameters/token'
+        - $ref: '#/components/parameters/imageName'
+      responses:
+        '200':
+          description: OK
+          schema:
+            type: object
+            properties:
+              message:
+                type: string
+                example: Image pulled built
+        '403':
+          description: No Dockerfile found in the source code folder
+          schema:
+            type: object
+            properties:
+              error:
+                type: string
+                example: No Dockerfile found in the source code folder
+        '404':
+          description: No source code found
+          schema:
+            type: object
+            properties:
+              error:
+                type: string
+                example: No source code found
+        '500':
+          description: Unable to build image
+          schema:
+            type: object
+            properties:
+              error:
+                type: string
+                example: Unable to build image
+  /images/push:
+    post:
+      summary: push a Docker image
+      description: push Docker image specified by name
+      operationId: pushImage
+      tags:
+        - Images
+      parameters:
+        - $ref: '#/components/parameters/token'
+        - $ref: '#/components/parameters/imageName'
+      responses:
+        '200':
+          description: OK
+          schema:
+            type: object
+            properties:
+              message:
+                type: string
+                example: Image pushed to DockerHub
+        '404':
+          description: Unable to push image
+          schema:
+            type: object
+            properties:
+              error:
+                type: string
+                example: Unable to push image
+  /images/{id}:
+    delete:
+      summary: Delete docker image
+      description: Delete existing Docker image from the host
+      operationId: deleteImage
+      tags:
+        - Images
+      parameters:
+        - $ref: '#/components/parameters/token'
+        - $ref: '#/components/parameters/imageIdPath'
+      responses:
+        '200':
+          description: OK
+          schema:
+            type: object
+            properties:
+              message:
+                type: string
+                example: Image removed successfully
+        '404':
+          description: Unable to remove container
+          schema:
+            type: object
+            properties:
+              error:
+                type: string
+                example: Image not found
+        '409':
+          description: Image cannot be removed
+          schema:
+            type: object
+            properties:
+              error:
+                type: string
+                example: Image cannot be removed
+  /imagefreshness/{id}:
+    post:
+      summary: get imagefreshness entry
+      description: get single imagefreshness entry or its vulnerability check records, if optional date params provided
+      operationId: getImageFreshnessEntry
+      tags:
+        - ImageFreshness
+      parameters:
+        - $ref: '#/components/parameters/imageNamePath'
+        - $ref: '#/components/parameters/startDate'
+        - $ref: '#/components/parameters/endDate'
+      responses:
+        '200':
+          description: OK
+          schema:
+            type: object
+            properties:
+              freshnessGrade:
+                type: string
+                example: A
+              entry:
+                properties:
+                  name:
+                    type: string
+                    example: pawelpaszki/vuln-demo-2-node
+                  lowVulnCount:
+                    type: number
+                    example: 0
+                  mediumVulnCount:
+                    type: number
+                    example: 0
+                  highVulnCount:
+                    type: number
+                    example: 0
+                  vulnerabilityCheckRecords:
+                    type: object
+                    example: []
+        '404':
+          description: Unable to find image freshness with id provided
+          schema:
+            type: object
+            properties:
+              error:
+                type: string
+                example: Unable to find image freshness with id provided
+    delete:
+      summary: Delete image freshness entry
+      description: Delete an image freshness entry with specified id
+      operationId: deleteImageFreshnessEntry
+      tags:
+        - ImageFreshness
+      parameters:
+        - $ref: '#/components/parameters/token'
+        - $ref: '#/components/parameters/imageFreshnessIdPath'
+      responses:
+        '200':
+          description: OK
+          schema:
+            type: object
+            properties:
+              message:
+                type: string
+                example: Image removed successfully
+        '404':
+          description: Unable to remove image freshness entry
+          schema:
+            type: object
+            properties:
+              error:
+                type: string
+                example: Unable to remove image freshness entry
+  /imagefreshness:
+    put:
+      summary: save vulnerability check
+      description: scan container's source code and record found vulnerabilities
+      operationId: performVulnerabilityCheck
+      tags:
+        - ImageFreshness
+      parameters:
+        - $ref: '#/components/parameters/token'
+        - $ref: '#/components/parameters/imageName'
+        - $ref: '#/components/parameters/checkOnly'
+      responses:
+        '201':
+          description: OK
+          schema:
+            type: object
+            properties:
+              message:
+                type: string
+                example: Vulnerability check persisted successfully
+              updates:
+                type: object
+                example: []
+              vulnerabilityCheckRecord:
+                type: object
+                example:  []
+
+        '403':
+          description: Unable to persist vulnerability check. Docker image's name required
+          schema:
+            type: object
+            properties:
+              error:
+                type: string
+                example: Unable to persist vulnerability check. Docker image's name required
+        '404':
+          description: Source code not extracted for this image
+          schema:
+            type: object
+            properties:
+              error:
+                type: string
+                example: Source code not extracted for this image
+        '409':
+          description: Vulnerability check already persisted for today's date
+          schema:
+            type: object
+            properties:
+              error:
+                type: string
+                example: Vulnerability check already persisted for today's date
+        '500':
+          description: Unable to persist vulnerability check
+          schema:
+            type: object
+            properties:
+              error:
+                type: string
+                example: Unable to persist vulnerability check
+    post:
+      summary: Create an image freshness entry
+      description: create new image freshness entry for a Docker image
+      operationId: createImageFreshness
+      tags:
+        - ImageFreshness
+      parameters:
+        - $ref: '#/components/parameters/token'
+        - $ref: '#/components/parameters/imageName'
+      responses:
+        '201':
+          description: OK
+          schema:
+            type: object
+            properties:
+              message:
+                type: string
+                example: Image freshness created saved successfully
+        '403':
+          description: Unable to create image freshness entry
+          schema:
+            type: object
+            properties:
+              message:
+                type: string
+                example: Unable to create image freshness entry
+    delete:
+      summary: Delete image freshness entries
+      description: Delete image freshness entries
+      operationId: deleteImageFreshnessEntryies
+      parameters:
+        - $ref: '#/components/parameters/token'
+      tags:
+        - ImageFreshness
+      responses:
+        '200':
+          description: OK
+          schema:
+            type: object
+            properties:
+              message:
+                type: string
+                example: Image freshness entries deleted successfully
+    get:
+      summary: List all imagefreshness entries
+      description:  Lists all of the imagefreshness entries with the recorded vulnerabilities
+      operationId: listImageFreshnessEntries
+      parameters:
+        - $ref: '#/components/parameters/token'
+      tags:
+        - ImageFreshness
+      responses:
+        '200':
+          description: OK
+          schema:
+            type: object
+            properties:
+              name:
+                type: string
+                example: pawelpaszki/vuln-demo-2-node
+              lowVulnCount:
+                type: number
+                example: 0
+              mediumVulnCount:
+                type: number
+                example: 1
+              highVulnCount:
+                type: number
+                example: 1
+              vulnerabilityCheckRecords:
+                type: object
+                example: [{
+                  "date": "2018-02-15T12:46:47.872Z",
+                  "lowSeverity": [],
+                  "mediumSeverity": [
+                    {
+                      "dependencyPath": "marked@0.3.7",
+                      "description": "Cross-site Scripting (XSS)",
+                      "name": "marked@0.3.7",
+                      "remediation": "marked@0.3.7 to marked@0.3.9"
+                    },
+                    {
+                      "dependencyPath": "mqtt@2.0.1",
+                      "description": "Denial of Service (DoS)",
+                      "name": "mqtt@2.0.1",
+                      "remediation": "mqtt@2.0.1 to mqtt@2.15.0"
+                    }
+                  ],
+                  "highSeverity": [
+                    {
+                      "dependencyPath": "marked@0.3.7",
+                      "description": "Cross-site Scripting (XSS)",
+                      "name": "marked@0.3.7",
+                      "remediation": "marked@0.3.7 to marked@0.3.9"
+                    },
+                    {
+                      "dependencyPath": "marked@0.3.7",
+                      "description": "Regular Expression Denial of Service (ReDoS)",
+                      "name": "marked@0.3.7",
+                      "remediation": "marked@0.3.7 to marked@0.3.9"
+                    }
+                  ]
+                }]
+
+  /src/{imageName}:
+    delete:
+      summary: remove source code
+      description: remove extracted source code of a container
+      operationId: deleteSrc
+      tags:
+        - Src
+      parameters:
+        - $ref: '#/components/parameters/token'
+        - $ref: '#/components/parameters/imageNamePath'
+      responses:
+        '200':
+          description: OK
+          schema:
+            type: object
+            properties:
+              message:
+                type: string
+                example: Source code successfully removed
+        '404':
+          description: No source code found
+          schema:
+            type: object
+            properties:
+              error:
+                type: string
+                example: No source code found
+        '500':
+          description: No image name provided
+          schema:
+            type: object
+            properties:
+              error:
+                type: string
+                example: No image name provided
+  /src/availableDirs:
+    get:
+      summary: extracted images
+      description: get a list of names of images with extracted source code
+      operationId: getAvailableDirs
+      tags:
+        - Src
+      parameters:
+        - $ref: '#/components/parameters/token'
+      responses:
+        '200':
+          description: OK
+          schema:
+            type: array
+  /dockerLogin:
+    post:
+      summary: Docker login
+      description: login to Docker registry
+      operationId: dockerLogin
+      tags:
+        - Users
+      parameters:
+        - $ref: '#/components/parameters/token'
+        - $ref: '#/components/parameters/dockerUsername'
+        - $ref: '#/components/parameters/dockerPassword'
+      responses:
+        '200':
+          description: OK
+          schema:
+            type: object
+            properties:
+              message:
+                type: string
+                example: Login Successful
+        '401':
+          description: Unable to create image freshness entry
+          schema:
+            type: object
+            properties:
+              message:
+                type: string
+                example: Incorrect login and/or password
+  /src/checkOS:
+    post:
+      summary: Check OS
+      description: check operating system of a container
+      operationId: checkOS
+      tags:
+        - Src
+      parameters:
+        - $ref: '#/components/parameters/token'
+        - $ref: '#/components/parameters/imageName'
+      responses:
+        '200':
+          description: OK
+          schema:
+            type: object
+            properties:
+              message:
+                type: string
+                example: [
+                  "latest": 3.7,
+                  "version": 3.6,
+                  "name": "alpine"
+                ]
+        '404':
+          description: No source code found
+          schema:
+            type: object
+            properties:
+              error:
+                type: string
+                example: No source code found
+        '500':
+          description: No image name provided
+          schema:
+            type: object
+            properties:
+              error:
+                type: string
+                example: No image name provided'
+  /src/tests:
+    post:
+      summary: Run npm tests
+      description: run npm tests inside extracted container's source code
+      operationId: runNpmTests
+      tags:
+        - Src
+      parameters:
+        - $ref: '#/components/parameters/token'
+        - $ref: '#/components/parameters/imageName'
+      responses:
+        '200':
+          description: OK
+          schema:
+            type: object
+            properties:
+              testResults:
+                type: string
+                example: [
+                  "> node ./node_modules/mocha/bin/mocha ./tests/accept/*.js --timeout 15000",
+                  "  /GET square",
+                  "    ✓ should return correct square result",
+                  "  /GET cube",
+                  "    ✓ should return correct cube result",
+                  "  /GET sum",
+                  "    ✓ should return correct sum",
+                  "  /GET difference",
+                  "    ✓ should return correct subtraction result",
+                  "  /GET division",
+                  "    ✓ should return correct division result",
+                  "  5 passing (29ms)"
+                ]
+        '404':
+          description: No source code found
+          schema:
+            type: object
+            properties:
+              error:
+                type: string
+                example: No source code found
+        '500':
+          description: No image name provided
+          schema:
+            type: object
+            properties:
+              error:
+                type: string
+                example: No image name provided
+  /src/checkUpdates:
+    post:
+      summary: check for updates
+      description: check if any of the npm modules can be updated
+      operationId: checkUpdates
+      tags:
+        - Src
+      parameters:
+        - $ref: '#/components/parameters/token'
+        - $ref: '#/components/parameters/imageName'
+        - $ref: '#/components/parameters/packageName'
+      responses:
+        '200':
+          description: OK
+          schema:
+            type: object
+            properties:
+              updatesAvailable:
+                type: string
+                example: [
+                  " debug          2.6.7  →   3.1.0 ",
+                  " mqtt           2.0.1  →  2.15.3 ",
+                  " express       4.15.3  →  4.16.2 ",
+                  " mathjs        3.16.0  →   4.0.0 ",
+                  " st             1.2.1  →   1.2.2 ",
+                  " coffeescript   1.0.1  →   2.2.2 ",
+                  " swagger-ui     2.2.0  →  3.11.0 ",
+                  " mocha         ^4.1.0  →  ^5.0.1 ",
+                  " sinon  ^4.1.3  →  ^4.4.2 "
+                ]
+        '404':
+          description: No source code found
+          schema:
+            type: object
+            properties:
+              error:
+                type: string
+                example: No source code found
+        '500':
+          description: No image name provided
+          schema:
+            type: object
+            properties:
+              error:
+                type: string
+                example: No image name provided
+  /src/update:
+    post:
+      summary: update npm components
+      description: update npm components and reinstall node_modules
+      operationId: updateComponents
+      tags:
+        - Src
+      parameters:
+        - $ref: '#/components/parameters/token'
+        - $ref: '#/components/parameters/imageName'
+      responses:
+        '200':
+          description: OK
+          schema:
+            type: object
+            properties:
+              updatedModules:
+                type: string
+                example:  [
+                  "debug          2.6.7  →   3.1.0",
+                  "mqtt           2.0.1  →  2.15.3",
+                  "express       4.15.3  →  4.16.2",
+                  "mathjs        3.16.0  →   4.0.0",
+                  "st             1.2.1  →   1.2.2",
+                  "coffeescript   1.0.1  →   2.2.2",
+                  "swagger-ui     2.2.0  →  3.11.0",
+                  "mocha         ^4.1.0  →  ^5.0.1",
+                  "sinon  ^4.1.3  →  ^4.4.2"
+                ]
+        '404':
+          description: No source code found
+          schema:
+            type: object
+            properties:
+              error:
+                type: string
+                example: No source code found
+        '500':
+          description: No image name provided
+          schema:
+            type: object
+            properties:
+              error:
+                type: string
+                example: No image name provided
+  /login:
+    post:
+      summary: login
+      description: login to the api
+      operationId: login
+      tags:
+        - Users
+      parameters:
+        - $ref: '#/components/parameters/username'
+        - $ref: '#/components/parameters/password'
+      responses:
+        '200':
+          description: OK
+          schema:
+            type: object
+            properties:
+              token:
+                type: string
+                example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjVhOTViNjgyNDA3MmUxNDg2NTFmNTdlZCIsImlhdCI6MTUxOTc2MTAyNiwiZXhwIjoxNTE5NzY0NjI2fQ.tzFG3wY-WeaNVgL9_pJTlo_es0CO9wbfinxZ35iAkEM
+        '401':
+          description: Incorrect credentials
+          schema:
+            type: object
+            properties:
+              token:
+                type: string
+                example: 'null'
+        '404':
+          description: Unable to find username
+          schema:
+            type: object
+            properties:
+              error:
+                type: string
+                example: Unable to find username
+  /register:
+    post:
+      summary: register
+      description: register a user in the api
+      operationId: register
+      tags:
+        - Users
+      parameters:
+        - $ref: '#/components/parameters/username'
+        - $ref: '#/components/parameters/password'
+      responses:
+        '200':
+          description: OK
+          schema:
+            type: object
+            properties:
+              token:
+                type: string
+                example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjVhOTViNjgyNDA3MmUxNDg2NTFmNTdlZCIsImlhdCI6MTUxOTc2MTAyNiwiZXhwIjoxNTE5NzY0NjI2fQ.tzFG3wY-WeaNVgL9_pJTlo_es0CO9wbfinxZ35iAkEM
+        '403':
+          description: Incorrect credentials
+          schema:
+            type: object
+            properties:
+              token:
+                type: string
+                example: 'null'
+  /users:
+    delete:
+      summary: delete all users
+      description: delete all users from the database
+      operationId: deleteUsers
+      tags:
+        - Users
+      responses:
+        '200':
+          description: OK
+          schema:
+            type: object
+            properties:
+              message:
+                type: string
+                example: All users deleted successfully
+  /logout:
+    get:
+      summary: logout
+      description: logout from the api
+      operationId: logout
+      tags:
+        - Users
+      responses:
+        '200':
+          description: OK
+          schema:
+            type: object
+            properties:
+              token:
+                type: string
+                example: 'null'

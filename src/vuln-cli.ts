@@ -1,3 +1,5 @@
+#!/usr/bin/env ts-node
+
 import * as commander from 'commander';
 
 import * as actions from './cli-middleware';
@@ -7,95 +9,150 @@ commander
   .description('Docker Image Freshness and Vulnerability Manager');
 
 commander
-  .command('createContainer <name>')
-  // .alias('cc')
+  .command('createContainer <token> <imageName>')
   .description('Create a container')
-  .action((name) => {
-    actions.createContainer(name);
+  .action((token, imageName) => {
+    actions.createContainer(token, imageName);
   });
 
 commander
-  .command('startContainer <containerId>')
+  .command('startContainer <token> <containerId>')
   .description('Start a container')
-  .action((containerId) => {
-    actions.startContainer(containerId);
+  .action((token, containerId) => {
+    actions.startContainer(token, containerId);
   });
 
 commander
-  .command('stopContainer <containerId>')
+  .command('stopContainer <token> <containerId>')
   .description('Stop a container')
-  .action((containerId) => {
-    actions.stopContainer(containerId);
+  .action((token, containerId) => {
+    actions.stopContainer(token, containerId);
   });
 
 commander
-  .command('removeContainer <containerId>')
+  .command('removeContainer <token> <containerId>')
   .description('Remove a container')
-  .action((containerId) => {
-    actions.removeContainer(containerId);
+  .action((token, containerId) => {
+    actions.removeContainer(token, containerId);
   });
 
 commander
-  .command('extractContainer <containerId> <imageName>')
+  .command('extractContainer <token> <containerId> <imageName>')
   .description('Extract a container')
-  .action((containerId, imageName) => {
-    actions.extractContainer(containerId, imageName);
+  .action((token, containerId, imageName) => {
+    actions.extractContainer(token, containerId, imageName);
   });
 
 commander
-  .command('checkForVuln <name>')
+  .command('checkForVuln <token> <imageName> <checkOnly>')
   .description('Check for vulnerable components')
-  .action((name) => {
-    actions.performVulnerabilityCheck(name);
+  .action((token, imageName, checkOnly) => {
+    actions.checkForVulnComps(token, imageName, checkOnly);
   });
 
 commander
-  .command('pullImage <imageName>')
+  .command('persistVulnCheck <token> <imageName>')
+  .description('Perform and persist vulnerability check')
+  .action((token, imageName) => {
+    actions.performVulnerabilityCheck(token, imageName);
+  });
+
+commander
+  .command('pullImage <token> <imageName>')
   .description('Pull Docker image')
-  .action((imageName) => {
-    actions.pullImage(imageName);
+  .action((token, imageName) => {
+    actions.pullImage(token, imageName);
   });
 
 commander
-  .command('removeImage <imageId>')
+  .command('removeImage <token> <imageId>')
   .description('Remove Docker image')
-  .action((imageId) => {
-    actions.removeImage(imageId);
+  .action((token, imageId) => {
+    actions.removeImage(token, imageId);
   });
 
 commander
-  .command('runNpmTests <imageName>')
+  .command('runNpmTests <token> <imageName>')
   .description('Run npm tests')
-  .action((imageName) => {
-    actions.runNpmTests(imageName);
+  .action((token, imageName) => {
+    actions.runNpmTests(token, imageName);
   });
 
 commander
-  .command('removeSrcCode <imageName>')
+  .command('runNcuCheck <token> <imageName>')
+  .description('Run ncu check')
+  .action((token, imageName) => {
+    actions.runNcuCheck(token, imageName);
+  });
+
+commander
+  .command('updateComponents <token> <imageName>')
+  .description('Update npm components')
+  .action((token, imageName) => {
+    actions.updateNpmComponents(token, imageName);
+  });
+
+commander
+  .command('updateComponent <token> <imageName> <packageName>')
+  .description('Update npm components')
+  .action((token, imageName, packageName) => {
+    actions.updateNpmComponent(token, imageName, packageName);
+  });
+
+commander
+  .command('updateAndReinstall <token> <imageName> <packageName>')
+  .description('Update npm components')
+  .action((token, imageName, packageName) => {
+    actions.updateAndReinstall(token, imageName, packageName);
+  });
+
+commander
+  .command('removeSrcCode <token> <imageName>')
   .description('Remove source code')
-  .action((imageName) => {
-    actions.removeSrcCode(imageName);
+  .action((token, imageName) => {
+    actions.removeSrcCode(token, imageName);
   });
 
 commander
-  .command('dockerLogin <username> <password>')
-  .description('Docker Login')
+  .command('dockerLogin <token> <username> <password>')
+  .description('Docker login')
+  .action((token, username, password) => {
+    actions.dockerLogin(token, username, password);
+  });
+
+commander
+  .command('checkTag <token> <imageName>')
+  .description('Check latest image tag')
+  .action((token, imageName) => {
+    actions.checkTag(token, imageName);
+  });
+
+commander
+  .command('buildImage <token> <imageName>')
+  .description('Build Docker image')
+  .action((token, imageName) => {
+    actions.buildImage(token, imageName);
+  });
+
+commander
+  .command('pushImage <token> <imageName>')
+  .description('Push Docker image')
+  .action((token, imageName) => {
+    actions.pushImage(token, imageName);
+  });
+
+commander
+  .command('register <username> <password>')
+  .description('Register')
   .action((username, password) => {
-    actions.dockerLogin(username, password);
+    actions.register(username, password);
   });
 
 commander
-  .command('buildImage <imageName>')
-  .description('Docker Login')
-  .action((imageName) => {
-    actions.buildImage(imageName);
-  });
-
-commander
-  .command('pushImage <imageName>')
-  .description('Docker Login')
-  .action((imageName) => {
-    actions.pushImage(imageName);
+  .command('login <username> <password>')
+  .description('Login')
+  .action((username, password) => {
+    actions.login(username, password);
   });
 
 if (!process.argv.slice(2).length) {

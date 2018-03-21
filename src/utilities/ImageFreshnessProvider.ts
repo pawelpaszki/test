@@ -11,8 +11,10 @@ class ImageFreshnessProvider {
       return 'C';
     } else if (lowVulnCount > 0 && mediumVulnCount === 0 && highVulnCcount === 0) {
       return 'B';
-    } else {
+    } else if (lowVulnCount === 0 && mediumVulnCount === 0 && highVulnCcount === 0) {
       return 'A';
+    } else {
+      return '';
     }
   }
 }

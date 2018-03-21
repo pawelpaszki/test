@@ -1,10 +1,3 @@
-import * as fs from 'fs';
-
-/**
- * @author Pawel Paszki
- * This class is used to read content of files specified by their path
- */
-
 class ImageNameToDirNameConverter {
 
   public static convertImageNameToDirName(imageName: string): string {
